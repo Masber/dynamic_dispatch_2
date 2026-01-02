@@ -1,0 +1,8 @@
+[package]
+name = "dynamic_dispatch_2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures = "0.3.31"
+anyhow = "1.0.95"
