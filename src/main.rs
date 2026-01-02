@@ -8,7 +8,7 @@ pub async fn get_logs() -> anyhow::Result<impl AsyncBufRead> {
 }
 
 // The trait to get logs from a backend that has a k8s cluster
-trait K8sLoger {
+trait Loger {
     type T: AsyncBufRead;
 
     async fn get_log_buffer() -> anyhow::Result<Self::T>;
@@ -17,7 +17,7 @@ trait K8sLoger {
 // K8s backend
 struct Backend1 {}
 
-impl K8sLoger for Backend1 {
+impl Loger for Backend1 {
     type T = Pin<Box<dyn AsyncBufRead>>;
 
     async fn get_log_buffer() -> anyhow::Result<Self::T> {
@@ -28,7 +28,7 @@ impl K8sLoger for Backend1 {
 // Journalctl backend
 struct Backend2 {}
 
-impl K8sLoger for Backend2 {
+impl Loger for Backend2 {
     type T = Pin<Box<dyn AsyncBufRead>>;
 
     async fn get_log_buffer() -> anyhow::Result<Self::T> {
@@ -47,5 +47,6 @@ pub async fn get_system_logs(backend_type: &str) -> anyhow::Result<impl AsyncBuf
 
 pub fn main() {
     let backend_type: &str = "backend1";
-    get_system_logs(backend_type);
+
+    async { get_system_logs(backend_type).await };
 }
